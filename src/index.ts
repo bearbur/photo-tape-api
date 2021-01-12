@@ -17,6 +17,18 @@ app.use(expressWinston.logger({
     colorize: false
 }));
 
+
+
+// 1. route for posts
+
+// 01. get all posts
+
+app.get("/api/posts", (req,res)=>res.send(
+    [
+            {id: 1, title: 'Oh boy!', payload: `This was funny`, date: new Date(), author: 'admin'}
+          ]
+));
+
 // define a route handler for the default home page
 app.get( "/", ( req, res ) => {
     res.send( "Hello world!" );

@@ -16,6 +16,11 @@ app.use(express_winston_1.default.logger({
     expressFormat: true,
     colorize: false
 }));
+// 1. route for posts
+// 01. get all posts
+app.get("/api/posts", function (req, res) { return res.send([
+    { id: 1, title: 'Oh boy!', payload: "This was funny", date: new Date(), author: 'admin' }
+]); });
 // define a route handler for the default home page
 app.get("/", function (req, res) {
     res.send("Hello world!");
