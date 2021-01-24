@@ -1,13 +1,15 @@
 import express from "express";
 import winston from "winston";
 import expressWinston from "express-winston"
+import routerApp from './router'
+
 const app = express();
 const port = 8080; // default port to listen
 
-
 app.use(expressWinston.logger({
     transports: [
-        new winston.transports.Console()
+        new winston.transports.Console(),
+        new winston.transports.File()
     ],
     format: winston.format.combine(
         winston.format.colorize(),
@@ -17,7 +19,11 @@ app.use(expressWinston.logger({
     colorize: false
 }));
 
+app.use(express.json());
 
+app.use( routerApp);
+/*
+// 0. Auth routes
 
 // 1. route for posts
 
@@ -33,6 +39,8 @@ app.get("/api/posts", (req,res)=>res.send(
 app.get( "/", ( req, res ) => {
     res.send( "Hello world!" );
 } );
+*/
+
 
 // start the Express server
 app.listen( port, () => {
