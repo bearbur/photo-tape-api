@@ -1,15 +1,18 @@
 import express from "express";
+import bodyParser from 'body-parser';
 import winston from "winston";
-import expressWinston from "express-winston"
-import routerApp from './router'
+import expressWinston from "express-winston";
+import routerApp from './router';
 
 const app = express();
-const port = 8080; // default port to listen
 
+/* default port to listen*/
+const port = 8080;
+
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressWinston.logger({
     transports: [
-        new winston.transports.Console(),
-        new winston.transports.File()
+        new winston.transports.Console()
     ],
     format: winston.format.combine(
         winston.format.colorize(),
@@ -41,8 +44,7 @@ app.get( "/", ( req, res ) => {
 } );
 */
 
-
-// start the Express server
+/* start the Express server */
 app.listen( port, () => {
     /* tslint:disable */
     console.log( `server started at http://localhost:${ port }` );

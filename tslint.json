@@ -6,7 +6,92 @@
   ],
   "jsRules": {},
   "rules": {
-    "trailing-comma": [ false ]
+    "indent": [true, "spaces", 4],
+    "variable-name": {
+      "options": [
+        "ban-keywords",
+        "check-format",
+        "allow-leading-underscore",
+        "allow-pascal-case"
+      ]
+    },
+    "comment-type": [true, "doc", "multiline"],
+    "prefer-switch": true,
+    "comment-format": [true, "check-space", "check-uppercase", "allow-trailing-lowercase"],
+    "class-name": true,
+    "array-type": [true, "array"],
+    "no-mergeable-namespace": true,
+    "prefer-const": true,
+    "no-var-keyword": true,
+    "no-unsafe-any": true,
+    "prefer-readonly": true,
+    "no-string-throw": true,
+    "no-return-await": true,
+    "no-null-keyword": true,
+    "no-null-undefined-union": true,
+    "no-misused-new": true,
+    "no-floating-promises": true,
+    "no-dynamic-delete": true,
+    "no-empty": true,
+    "no-duplicate-variable": [true, "check-parameters"],
+    "no-duplicate-switch-case": true,
+    "no-duplicate-super": true,
+    "no-bitwise": true,
+    "no-conditional-assignment": true,
+    "await-promise": true,
+    "only-arrow-functions": true,
+    "no-namespace": true,
+    "no-magic-numbers": [true, 1, 2, 3],
+    "no-import-side-effect": true,
+    "no-for-in": true,
+    "no-any": true,
+    "ban-ts-ignore": true,
+    "no-duplicate-imports": [true, {"allow-namespace-imports": true}],
+    "max-classes-per-file": [true, 1],
+    "cyclomatic-complexity": true,
+    "switch-default": true,
+    "one-variable-per-declaration": true,
+    "one-line": [true, "check-catch", "check-finally", "check-else"],
+    "space-before-function-paren": [true, "always"],
+    "trailing-comma": [ false ],
+    "no-console": [true, "log", "error"],
+    "prefer-object-spread": true,
+    "triple-equals": true,
+    "max-file-line-count": [true, 200],
+    "encoding": true,
+    "align": [true, "parameters", "statements"],
+    "eofline": true,
+    "no-switch-case-fall-through": true,
+    "semicolon": [true, "always"],
+    "whitespace": [true, "check-branch", "check-operator", "check-typecast"],
+    "typedef-whitespace": [
+      true,
+      {
+        "call-signature": "nospace",
+        "index-signature": "nospace",
+        "parameter": "nospace",
+        "property-declaration": "nospace",
+        "variable-declaration": "nospace"
+      },
+      {
+        "call-signature": "onespace",
+        "index-signature": "onespace",
+        "parameter": "onespace",
+        "property-declaration": "onespace",
+        "variable-declaration": "onespace"
+      }
+    ],
+    "arrow-parens": [true, "ban-single-arg-parens"],
+    "newline-before-return": true,
+    "max-line-length": [
+      true,
+      {
+        "limit": 120,
+        "ignore-pattern": "^import |^export {(.*?)}",
+        "check-strings": true,
+        "check-regex": true
+      }
+    ]
   },
   "rulesDirectory": []
 }

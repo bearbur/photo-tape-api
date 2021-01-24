@@ -5,10 +5,10 @@ const router = express.Router();
 
 /*Auth routes*/
 
-router.get('/auth', (req,res,next)=>{
+router.get('/auth', (req,res,next) => {
     res.send('fake response');
-})
+});
 
-router.post('/auth/register',authRegister)
+router.post('/auth/register',authRegister);
 
 export default router;
