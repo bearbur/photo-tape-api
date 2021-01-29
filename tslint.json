@@ -6,7 +6,6 @@
   ],
   "jsRules": {},
   "rules": {
-    "indent": [true, "spaces", 4],
     "variable-name": {
       "options": [
         "ban-keywords",
@@ -17,7 +16,7 @@
     },
     "comment-type": [true, "doc", "multiline"],
     "prefer-switch": true,
-    "comment-format": [true, "check-space", "check-uppercase", "allow-trailing-lowercase"],
+    "comment-format": [true, "check-space", "check-uppercase", "check-lowercase"],
     "class-name": true,
     "array-type": [true, "array"],
     "no-mergeable-namespace": true,
@@ -51,47 +50,15 @@
     "cyclomatic-complexity": true,
     "switch-default": true,
     "one-variable-per-declaration": true,
-    "one-line": [true, "check-catch", "check-finally", "check-else"],
-    "space-before-function-paren": [true, "always"],
     "trailing-comma": [ false ],
     "no-console": [true, "log", "error"],
     "prefer-object-spread": true,
     "triple-equals": true,
     "max-file-line-count": [true, 200],
     "encoding": true,
-    "align": [true, "parameters", "statements"],
-    "eofline": true,
     "no-switch-case-fall-through": true,
-    "semicolon": [true, "always"],
-    "whitespace": [true, "check-branch", "check-operator", "check-typecast"],
-    "typedef-whitespace": [
-      true,
-      {
-        "call-signature": "nospace",
-        "index-signature": "nospace",
-        "parameter": "nospace",
-        "property-declaration": "nospace",
-        "variable-declaration": "nospace"
-      },
-      {
-        "call-signature": "onespace",
-        "index-signature": "onespace",
-        "parameter": "onespace",
-        "property-declaration": "onespace",
-        "variable-declaration": "onespace"
-      }
-    ],
-    "arrow-parens": [true, "ban-single-arg-parens"],
-    "newline-before-return": true,
-    "max-line-length": [
-      true,
-      {
-        "limit": 120,
-        "ignore-pattern": "^import |^export {(.*?)}",
-        "check-strings": true,
-        "check-regex": true
-      }
-    ]
+    "newline-before-return": true
+
   },
   "rulesDirectory": []
 }

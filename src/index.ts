@@ -24,25 +24,8 @@ app.use(expressWinston.logger({
 
 app.use(express.json());
 
+/*Routing*/
 app.use( routerApp);
-/*
-// 0. Auth routes
-
-// 1. route for posts
-
-// 01. get all posts
-
-app.get("/api/posts", (req,res)=>res.send(
-    [
-            {id: 1, title: 'Oh boy!', payload: `This was funny`, date: new Date(), author: 'admin'}
-          ]
-));
-
-// define a route handler for the default home page
-app.get( "/", ( req, res ) => {
-    res.send( "Hello world!" );
-} );
-*/
 
 /* start the Express server */
 app.listen( port, () => {
@@ -50,3 +33,5 @@ app.listen( port, () => {
     console.log( `server started at http://localhost:${ port }` );
     /* tslint:enable */
 } );
+
+

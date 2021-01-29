@@ -7,7 +7,7 @@
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
     "build": "tsc",
     "prestart": "npm run build",
-    "start": "node .",
+    "start": "npm run prestart && node .",
     "start:dev": "nodemon .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "tslint-check": "tslint-config-prettier-check ./tslint.json"
@@ -15,11 +15,13 @@
   "dependencies": {
     "express": "4.17.1",
     "express-winston": "4.0.5",
-    "winston": "3.3.3"
+    "winston": "3.3.3",
+    "mongoose": "5.11.13"
   },
   "devDependencies": {
     "@types/express": "^4.17.9",
     "@types/node": "^14.14.10",
+    "@types/mongoose": "5.10.3",
     "tslint": "6.1.3",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^4.1.2",
