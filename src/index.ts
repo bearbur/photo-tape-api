@@ -3,6 +3,8 @@ import bodyParser from 'body-parser';
 import winston from "winston";
 import expressWinston from "express-winston";
 import routerApp from './router';
+import {loggerCreator} from "./core/services/logger/logger";
+import InitiateMongoServer from "./config/db-mongo";
 
 const app = express();
 
@@ -24,13 +26,21 @@ app.use(expressWinston.logger({
 
 app.use(express.json());
 
+/*Database connection - set up default mongoose connection*/
+InitiateMongoServer().then(()=>{
+    loggerCreator.info( `Server DB connection success.` );
+}).catch(()=>{
+    loggerCreator.error( `Server DB catch error.` );
+});
+
+
 /*Routing*/
 app.use( routerApp);
 
 /* start the Express server */
 app.listen( port, () => {
     /* tslint:disable */
-    console.log( `server started at http://localhost:${ port }` );
+    loggerCreator.info(  `Server started at http://localhost:${ port }`  );
     /* tslint:enable */
 } );
 
