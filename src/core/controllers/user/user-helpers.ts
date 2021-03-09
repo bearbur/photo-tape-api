@@ -8,6 +8,7 @@ export const userCheckLogin = (req: Request, res: Response, next: NextFunction) 
     const token = authHeader && authHeader.split(' ')[1];
 
     if(!token){
+
         res.status(httpCodes.noAuth);
         res.send({"error":"No auth header."});
 
@@ -15,8 +16,38 @@ export const userCheckLogin = (req: Request, res: Response, next: NextFunction) 
     }
 
     /* todo - by token check access of user */
+
     /*tslint:disable*/
     console.log('token: ', token);
     /*tslint:enable*/
+    next();
+}
+
+
+
+interface ReqObjectBody {
+    username: string;
+    password: string;
+}
+
+interface ReqObject {
+    body: ReqObjectBody
+}
+
+export const userRegCheckBody = (req: ReqObject, res: Response, next: NextFunction) => {
+
+
+
+    const reqObject : ReqObjectBody = req.body;
+    const username : string =reqObject.username;
+    const password : string = reqObject.password;
+
+    if(!username || !password){
+        res.status(httpCodes.badRequest);
+        res.send({"error":"Please, send username and password at the request body."});
+
+        return;
+    }
+
     next();
 }

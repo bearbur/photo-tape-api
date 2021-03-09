@@ -4,8 +4,8 @@
   "private": true,
   "main": "dist/index.js",
   "scripts": {
-    "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
-    "build": "tsc",
+    "prebuild": "npm run tslint-check && tslint -c tslint.json -p tsconfig.json --fix",
+    "build": "npm run prebuild && tsc",
     "prestart": "npm run build",
     "start": "npm run prestart && node NODE_ENV=PRODUCTION .",
     "start:dev": "npm run prestart && nodemon NODE_ENV=DEVELOPMENT .",

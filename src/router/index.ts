@@ -1,6 +1,7 @@
 import express from "express";
-import {authRegister} from "./auth-routes";
-import {userCheckLogin} from "../core/controllers/user/user-helpers";
+import {authRegister, authReadProfile} from "./helpers/user-routes-helpers";
+import {userCheckLogin, userRegCheckBody} from "../core/controllers/user/user-helpers";
+import {userRegister, userProfile} from "../core/constants/endpoints";
 
 const router = express.Router();
 
@@ -11,9 +12,11 @@ router.get('/auth', (req,res,next) => {
 });
 
 /* Register user can only user with admin or moderator right - need check login, check role */
-router.post('/auth/register',[userCheckLogin, authRegister]);
+router.post(userRegister,[userRegCheckBody, authRegister]);
 
+/* todo add userReadProfileInfo middleware action */
 /* Read users - need access */
+router.get(userProfile,[userCheckLogin, authReadProfile]);
 
 /* Public posts read */
 
