@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-
 const UserSchema = new Schema({
     username: {
         type: 'String',
@@ -12,7 +11,12 @@ const UserSchema = new Schema({
     password: {
         type: 'String',
         required: true
-    }
+    },
+    id: {
+        type: 'String',
+        required: true,
+        unique: true
+    },
 })
 
 UserSchema.pre('save',  (next)=>{

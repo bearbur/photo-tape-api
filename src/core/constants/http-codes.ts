@@ -1,7 +1,10 @@
 const badRequest = 400;
 const noAuth = 401;
 
+const serverError = 500;
+
 export default {
     badRequest,
-    noAuth
+    noAuth,
+    serverError
 }
