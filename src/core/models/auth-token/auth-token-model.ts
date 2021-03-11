@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const AuthTokenSchema = new Schema({
-    token: {
+    user_token: {
         type: 'String',
         required: true,
         unique: true

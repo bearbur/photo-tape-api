@@ -4,6 +4,9 @@ import {UserRegReqObject, UserRegReqObjectBody} from "../../interfaces/user-inte
 import AuthToken from '../../models/auth-token/auth-token-model';
 import {loggerCreator} from "../../services/logger/logger";
 import {checkOnEmptyArray} from "../../utils/data-analayze-utils";
+import {checkOnExpirationDate} from "../../utils/date-utils";
+import {FIRST_ELEMENT_INDEX} from "../../constants/utils-constants";
+import {AuthTokenFindResultUnit} from "../../interfaces/aut-token-interfaces";
 
 export const userCheckLogin = (req: Request, res: Response, next: NextFunction) => {
 
@@ -17,7 +20,7 @@ export const userCheckLogin = (req: Request, res: Response, next: NextFunction) 
 
     AuthToken.find({
         token
-    }, (err, data)=>{
+    }, (err, data: AuthTokenFindResultUnit[])=>{
         if(err){
             loggerCreator.error("Server error on find token.")
             res.status(httpCodes.serverError);
@@ -30,13 +33,30 @@ export const userCheckLogin = (req: Request, res: Response, next: NextFunction) 
         if(checkOnEmptyArray(data)){
             loggerCreator.error('Not found token at DB.')
             res.status(httpCodes.serverError);
-            res.send({"error":"Server error on find token."});
+            res.send({"error":"Not found token at DB."});
 
             return;
         }
 
+        const {expiration_date, user_token, user_id} = data[FIRST_ELEMENT_INDEX];
+
+        if(!expiration_date ||
+            !user_token ||
+            !user_id
+        ){
+            loggerCreator.error(`Wrong data at DB. Need contain expiration_date, user_token, user_id fields at model.`)
+            res.status(httpCodes.serverError);
+            res.send({"error":"Wrong data at DB. Need contain expiration_date, user_token, user_id fields at model."});
+
+            return;
+        }
+
+        /* todo check on expiration time - call checkOnExpirationDateMinutes with expiration_date field */
+
+        checkOnExpirationDate(expiration_date)
+
         /*tslint:disable*/
-        console.log('token: ', token);
+        loggerCreator.info('User token: ', token, ' was successfully login.');
         console.log('data: ', data);
         /*tslint:enable*/
         next();
