@@ -4,15 +4,10 @@ import {CrudController} from '../crud-controller';
 export class UserController extends CrudController{
     create (req: Request, res: Response, next: NextFunction): void {
 
-
-
-        /* todo check already login */
-
-        /* todo check username and password conditions */
-
-        /* todo check already exist */
-
-        /*  todo try save */
+        /* todo
+            - check already login  check username and password conditions
+            - check already exist
+            - try save */
 
         res.send({error: true});
 
