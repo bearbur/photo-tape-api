@@ -7,6 +7,7 @@ import {checkOnEmptyArray} from "../../utils/data-analayze-utils";
 import {checkOnExpirationDate} from "../../utils/date-utils";
 import {FIRST_ELEMENT_INDEX} from "../../constants/utils-constants";
 import {AuthTokenFindResultUnit} from "../../interfaces/aut-token-interfaces";
+import {MIN_PASSWORD_LENGTH, MIN_USERNAME_LENGTH} from "../../constants/user-conditions-constants";
 
 export const userCheckLogin = (req: Request, res: Response, next: NextFunction) => {
 
@@ -68,12 +69,20 @@ export const userCheckLogin = (req: Request, res: Response, next: NextFunction) 
 export const userRegCheckBody = (req: UserRegReqObject, res: Response, next: NextFunction) => {
 
     const reqObject : UserRegReqObjectBody = req.body;
-    const username : string =reqObject.username;
+    const username : string = reqObject.username;
     const password : string = reqObject.password;
 
+    /* Check login and password for minimum correct conditions (exist and not less than minimum conditions */
     if(!username || !password){
         res.status(httpCodes.badRequest);
         res.send({"error":"Please, send username and password at the request body."});
+
+        return;
+    }
+
+    if(username.length <= MIN_USERNAME_LENGTH || password.length <= MIN_PASSWORD_LENGTH){
+        res.status(httpCodes.badRequest);
+        res.send({"error": `Minimum length of username is ${MIN_USERNAME_LENGTH} symbols. Minimum length of username is ${MIN_PASSWORD_LENGTH} symbols.`});
 
         return;
     }

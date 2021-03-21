@@ -25,6 +25,10 @@ const UserSchema = new Schema({
         type: 'Number',
         required: true,
         default: userPermissions[GUEST].level
+    },
+    creation_date: {
+        type: 'Number',
+        required: true
     }
 })
 

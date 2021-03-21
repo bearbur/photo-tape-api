@@ -5,4 +5,10 @@ export const checkOnExpirationDate = (compareDate : number) => {
     loggerCreator.info(`Time: ${currentDate}, expiration date: ${compareDate}`)
 
     return currentDate < compareDate
+};
+
+const DEFAULT_TIME = 101;
+
+export const generateCurrentDateAtMs  = ()  => {
+    return DEFAULT_TIME
 }
