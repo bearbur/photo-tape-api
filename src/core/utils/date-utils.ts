@@ -7,8 +7,6 @@ export const checkOnExpirationDate = (compareDate : number) => {
     return currentDate < compareDate
 };
 
-const DEFAULT_TIME = 101;
-
 export const generateCurrentDateAtMs  = ()  => {
-    return DEFAULT_TIME
+    return Date.now();
 }
