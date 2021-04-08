@@ -1,9 +1,0 @@
-common prefix: /api
-
-/auth
-
-/blog
-
-/img
-
-/bio
