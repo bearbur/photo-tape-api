@@ -6,3 +6,4 @@ const withUserPrefix = (url: string) => `user/${url}`
 export const userRegister = withApiPrefix(withUserPrefix('register'));
 export const userProfile = withApiPrefix(withUserPrefix('profile'));
 export const userLogin  = withApiPrefix(withUserPrefix('login'));
+export const userLogout  = withApiPrefix(withUserPrefix('logout'));

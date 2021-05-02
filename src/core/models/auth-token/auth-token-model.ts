@@ -11,11 +11,16 @@ const AuthTokenSchema = new Schema({
     user_id: {
         type: 'String',
         required: true,
-        unique: true
+        unique: false
     },
     expiration_date: {
         type: 'Number',
         required: true
+    },
+    inactive: {
+        type: 'Boolean',
+        required: true,
+        default: false
     }
 })
 

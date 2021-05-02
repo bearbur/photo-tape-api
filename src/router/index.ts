@@ -1,15 +1,15 @@
 import express from "express";
 import {authRegister, authReadProfile} from "./helpers/user-routes-helpers";
-import {userCheckLogin, userRegCheckBody} from "../core/controllers/user/user-helpers";
-import {userRegister, userProfile, userLogin} from "../core/constants/endpoints";
+import {
+    checkLoginBodyHandler, generateSignJwtToken,
+    userCheckLogin,
+    userRegCheckBody,
+    userVerifierOnLogin
+} from "../core/controllers/user/user-midlewares";
+import {userRegister, userProfile, userLogin, userLogout} from "../core/constants/endpoints";
 
 const router = express.Router();
 
-/*Auth routes*/
-
-router.get('/auth', (req,res,next) => {
-    res.send('fake response');
-});
 
 /* Register user can only user with admin or moderator right - need check login, check role */
 router.post(userRegister,[userRegCheckBody, authRegister]);
@@ -23,7 +23,14 @@ router.get(userProfile,[userCheckLogin, authReadProfile]);
     If user already login - return to him new token and remove exist token
 */
 
-router.post(userLogin,[])
+router.post(userLogin,[checkLoginBodyHandler, userVerifierOnLogin, generateSignJwtToken])
+
+/*
+    Logout user
+    On success logout - remove auth token.
+*/
+
+router.post(userLogout,[])
 
 /* Public posts read */
 

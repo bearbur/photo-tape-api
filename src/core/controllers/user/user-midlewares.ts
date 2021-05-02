@@ -4,10 +4,13 @@ import {UserRegReqObject, UserRegReqObjectBody} from "../../interfaces/user-inte
 import AuthToken from '../../models/auth-token/auth-token-model';
 import {loggerCreator} from "../../services/logger/logger";
 import {checkOnEmptyArray} from "../../utils/data-analayze-utils";
-import {checkOnExpirationDate} from "../../utils/date-utils";
+import {checkOnExpirationDate, generateCurrentDateAtMs} from "../../utils/date-utils";
 import {FIRST_ELEMENT_INDEX} from "../../constants/utils-constants";
 import {AuthTokenFindResultUnit} from "../../interfaces/aut-token-interfaces";
 import {MIN_PASSWORD_LENGTH, MIN_USERNAME_LENGTH} from "../../constants/user-conditions-constants";
+import User from "../../models/user/user-model";
+import {generateHashPassword} from "../../utils/hash-passwords-utils";
+import {getJwtSignToken} from "../../utils/jwt-user-auth-utils";
 
 export const userCheckLogin = (req: Request, res: Response, next: NextFunction) => {
 
@@ -94,13 +97,83 @@ export const userCheckAuthTokenBody = (req: Request, res: Response, next: NextFu
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
 
-    if(!token){
+
+    if(!token || !authHeader){
 
         res.status(httpCodes.noAuth);
         res.send({"error":"No auth header."});
 
-        return;
     }
 
     return token
+}
+
+/*Will be check precondition for login endpoint*/
+export const checkLoginBodyHandler  = (req: { body: { username: string ,password: string } }, res: Response, next: NextFunction) => {
+
+    const missParametersHandler = (warningParameters: string) : void => {
+        res.status(httpCodes.badRequest);
+        res.send({"error": `Need for login: ${warningParameters}.`})
+
+        return;
+    }
+
+    const reqBody  = req.body;
+    if(!reqBody){
+        missParametersHandler('body object');
+    }
+
+    const {username, password} = reqBody;
+
+    if(!username){
+        missParametersHandler('user username at body object');
+    }
+
+    if(!password){
+        missParametersHandler('user password at body object');
+    }
+
+
+    next()
+}
+
+export const userVerifierOnLogin =  (req: {body: {username: string, password: string}}, res: Response, next: NextFunction) => {
+
+    const {username, password} = req.body;
+
+    User.find({username, password: generateHashPassword(password)}, (err: Error, response)=>{
+        if(err){
+            const minLengthLog = 0;
+            const maxLengthLog = 100;
+            const errorMessage = `Not find user with username ${username}. Stacktrace: ${err.toString().slice(minLengthLog,maxLengthLog)} at ${generateCurrentDateAtMs()}.`;
+            loggerCreator.error(errorMessage);
+            res.status(httpCodes.noAuth);
+            res.send({error: true, message: errorMessage});
+        }
+        next();
+    })
+
+}
+
+export const generateSignJwtToken =  (req: {body: {username: string, password: string}}, res: Response, next: NextFunction) => {
+    const username = req.body.username;
+
+
+
+    const userNameToken = getJwtSignToken(username);
+
+    /*Todo find id by username and check conditions for this user*/
+
+    /*Todo count all valid by time and id auth token*/
+
+    /*Todo - if count + 1 less than MAX - save new token at db width id as user_id and expiration date*/
+
+    /*Todo - if count + 1 more than MAX -   save new token at db width id as user_id and expiration date*/
+
+    /*Todo update earliest auth token 'deleted' to true*/
+
+    loggerCreator.info(`New bearer token: ${userNameToken} for username ${username}.`);
+
+    res.status(httpCodes.serverError);
+    res.send({error: true})
 }
