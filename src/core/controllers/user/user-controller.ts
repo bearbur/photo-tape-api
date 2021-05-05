@@ -12,23 +12,33 @@ export class UserController extends CrudController{
         /* By default all users will be create as GUEST permission, with new Date() as milliseconds */
         const requestBody : {username: string, password: string} = req.body;
         const {username, password }= requestBody
-        const newUser = new User({
-            username, password: generateHashPassword(password)
-        })
 
-        newUser.save().then(()=>{
-            const messageToLog = `Creation user success: ${username} was created at ${generateCurrentDateAtMs()}.`;
-            loggerCreator.info(messageToLog);
-            res.status(httpCodes.successCreation);
-            res.send({error: false, message: messageToLog});
-        }).catch(( err:Error )=> {
-            const minLengthLog = 0;
-            const maxLengthLog = 100;
-            const errorMessage = `Creation user error: ${err.toString().slice(minLengthLog,maxLengthLog)} at ${generateCurrentDateAtMs()}.`;
+        generateHashPassword(password).then(hashedPass=>{
+            const newUser = new User({
+                username, password: hashedPass
+            })
+
+            newUser.save().then(()=>{
+                const messageToLog = `Creation user success: ${username} was created at ${generateCurrentDateAtMs()}.`;
+                loggerCreator.info(messageToLog);
+                res.status(httpCodes.successCreation);
+                res.send({error: false, message: messageToLog});
+            }).catch(( err:Error )=> {
+                const minLengthLog = 0;
+                const maxLengthLog = 100;
+                const errorMessage = `Creation user error: ${err.toString().slice(minLengthLog,maxLengthLog)} at ${generateCurrentDateAtMs()}.`;
+                loggerCreator.error(errorMessage);
+                res.status(httpCodes.conflictAtRequest);
+                res.send({error: true, message: errorMessage});
+            })
+        }).catch(()=>{
+            const errorMessage = `Hash password error at ${generateCurrentDateAtMs()}.`;
             loggerCreator.error(errorMessage);
             res.status(httpCodes.conflictAtRequest);
             res.send({error: true, message: errorMessage});
         })
+
+
     }
 
     read (req: Request, res: Response, next: NextFunction): void {

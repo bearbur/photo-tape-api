@@ -58,11 +58,8 @@ export const userCheckLogin = (req: Request, res: Response, next: NextFunction) 
         /* todo check on expiration time - call checkOnExpirationDateMinutes with expiration_date field */
 
         checkOnExpirationDate(expiration_date)
-
-        /*tslint:disable*/
         loggerCreator.info('User token: ', token, ' was successfully login.');
-        console.log('data: ', data);
-        /*tslint:enable*/
+
         next();
     })
 
@@ -133,43 +130,59 @@ export const checkLoginBodyHandler  = (req: { body: { username: string ,password
         missParametersHandler('user password at body object');
     }
 
-
     next()
 }
 
 export const userVerifierOnLogin =  (req: {body: {username: string, password: string}}, res: Response, next: NextFunction) => {
-
     const {username, password} = req.body;
+    generateHashPassword(password).then(hashedPassword=>{
+        User.find({"username": username, "password": hashedPassword}, (err: Error, response)=>{
+            const zeroLengthResponse = 0;
+            if(err){
+                const minLengthLog = 0;
+                const maxLengthLog = 100;
+                const errorMessage = `Error on find user with username ${username}. Stacktrace: ${err.toString().slice(minLengthLog,maxLengthLog)} at ${generateCurrentDateAtMs()}.`;
+                loggerCreator.error(errorMessage);
+                res.status(httpCodes.noAuth);
+                res.send({error: true, message: errorMessage});
 
-    User.find({username, password: generateHashPassword(password)}, (err: Error, response)=>{
-        if(err){
-            const minLengthLog = 0;
-            const maxLengthLog = 100;
-            const errorMessage = `Not find user with username ${username}. Stacktrace: ${err.toString().slice(minLengthLog,maxLengthLog)} at ${generateCurrentDateAtMs()}.`;
-            loggerCreator.error(errorMessage);
-            res.status(httpCodes.noAuth);
-            res.send({error: true, message: errorMessage});
-        }
-        next();
+                return;
+            }
+            if(!response || response.length === zeroLengthResponse){
+                const warnMessage = `Not find user with username (${username}) and password at ${generateCurrentDateAtMs()}.`;
+                loggerCreator.warn(warnMessage);
+                res.status(httpCodes.notFound);
+                res.send({error: false, message: warnMessage});
+
+                return;
+            }
+
+            next();
+        })
+
     })
+        .catch(()=>{
+            const errorMessage = `Hash password error: at ${generateCurrentDateAtMs()}.`;
+            loggerCreator.error(errorMessage);
+            res.status(httpCodes.conflictAtRequest);
+            res.send({error: true, message: errorMessage});
+        })
+
 
 }
 
 export const generateSignJwtToken =  (req: {body: {username: string, password: string}}, res: Response, next: NextFunction) => {
     const username = req.body.username;
 
-
-
-    const userNameToken = getJwtSignToken(username);
-
     /*Todo find id by username and check conditions for this user*/
 
     /*Todo count all valid by time and id auth token*/
 
+    const userNameToken = getJwtSignToken(username);
+
     /*Todo - if count + 1 less than MAX - save new token at db width id as user_id and expiration date*/
 
     /*Todo - if count + 1 more than MAX -   save new token at db width id as user_id and expiration date*/
-
     /*Todo update earliest auth token 'deleted' to true*/
 
     loggerCreator.info(`New bearer token: ${userNameToken} for username ${username}.`);
