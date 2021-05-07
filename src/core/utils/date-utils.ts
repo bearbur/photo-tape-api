@@ -1,12 +1,12 @@
-import {loggerCreator} from "../services/logger/logger";
+import { loggerCreator } from '../services/logger/logger';
 
-export const checkOnExpirationDate = (compareDate : number) => {
+export const checkOnExpirationDate = (compareDate: number) => {
     const currentDate = Date.now();
-    loggerCreator.info(`Time: ${currentDate}, expiration date: ${compareDate}`)
+    loggerCreator.info(`Time: ${currentDate}, expiration date: ${compareDate}`);
 
-    return currentDate < compareDate
+    return currentDate < compareDate;
 };
 
-export const generateCurrentDateAtMs  = ()  => {
+export const generateCurrentDateAtMs = () => {
     return Date.now();
-}
+};

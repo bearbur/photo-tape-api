@@ -1,12 +1,15 @@
 import express from "express";
 import {authRegister, authReadProfile} from "./helpers/user-routes-helpers";
 import {
-    checkLoginBodyHandler, generateSignJwtToken,
-    userCheckLogin,
-    userRegCheckBody,
-    userVerifierOnLogin
-} from "../core/controllers/user/user-midlewares";
+    generateSignJwtToken, userCheckLogin,
+    userVerifierOnLogin,
+} from '../core/controllers/user/user-midlewares'
 import {userRegister, userProfile, userLogin, userLogout} from "../core/constants/endpoints";
+import {
+    checkLoginBodyHandler,
+    userCheckAuthTokenBody,
+    userRegCheckBody,
+} from '../core/controllers/user/user-body-check-handlers'
 
 const router = express.Router();
 
@@ -15,7 +18,7 @@ const router = express.Router();
 router.post(userRegister,[userRegCheckBody, authRegister]);
 
 /* Read users - need access */
-router.get(userProfile,[userCheckLogin, authReadProfile]);
+router.get(userProfile,[userCheckAuthTokenBody, userCheckLogin, authReadProfile]);
 
 /*
     Login user - user must exist and have permissions for login.

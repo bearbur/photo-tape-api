@@ -13,5 +13,5 @@ export default {
     noAuth,
     notFound,
     serverError,
-    successCreation
-}
+    successCreation,
+};

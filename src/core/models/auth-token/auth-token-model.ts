@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import {generateUUID} from "../../utils/id-utils";
+import { generateUUID } from '../../utils/id-utils';
 
 const Schema = mongoose.Schema;
 
@@ -8,23 +8,22 @@ const AuthTokenSchema = new Schema({
         type: 'String',
         required: true,
         unique: true,
-        default: generateUUID()
+        default: generateUUID(),
     },
     user_token: {
         type: 'String',
         required: true,
-        unique: true
+        unique: true,
     },
     expiration_date: {
         type: 'Number',
-        required: true
+        required: true,
     },
     inactive: {
         type: 'Boolean',
         required: true,
-        default: false
-    }
-})
+        default: false,
+    },
+});
 
-
-export default mongoose.model('AuthToken',AuthTokenSchema);
+export default mongoose.model('AuthToken', AuthTokenSchema);

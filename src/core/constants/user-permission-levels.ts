@@ -11,7 +11,7 @@ const USER_LEVEL = 1;
 export const userPermissions = {
     [ADMIN]: {
         name: ADMIN,
-        level: ADMIN_LEVEL
+        level: ADMIN_LEVEL,
     },
     [MODERATOR]: {
         name: MODERATOR,
@@ -19,10 +19,10 @@ export const userPermissions = {
     },
     [GUEST]: {
         name: GUEST,
-        level: GUEST_LEVEL
+        level: GUEST_LEVEL,
     },
     [USER]: {
         name: USER,
-        level: USER_LEVEL
-    }
-}
+        level: USER_LEVEL,
+    },
+};

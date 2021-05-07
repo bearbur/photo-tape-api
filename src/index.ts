@@ -1,8 +1,8 @@
-import express from "express";
+import express from 'express';
 import bodyParser from 'body-parser';
 import routerApp from './router';
-import {loggerCreator} from "./core/services/logger/logger";
-import InitiateMongoServer from "./config/db-mongo";
+import { loggerCreator } from './core/services/logger/logger';
+import InitiateMongoServer from './config/db-mongo';
 
 const app = express();
 
@@ -13,18 +13,20 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
 /*Database connection - set up default mongoose connection*/
-InitiateMongoServer().then(()=>{
-    loggerCreator.info( `Server DB connection success.` );
-}).catch(()=>{
-    loggerCreator.error( `Server DB catch error.` );
-});
+InitiateMongoServer()
+    .then(() => {
+        loggerCreator.info(`Server DB connection success.`);
+    })
+    .catch(() => {
+        loggerCreator.error(`Server DB catch error.`);
+    });
 
 /*Routing*/
-app.use( routerApp);
+app.use(routerApp);
 
 /* start the Express server */
-app.listen( port, () => {
-    loggerCreator.info(  `Server started at http://localhost:${ port }`  );
-} );
+app.listen(port, () => {
+    loggerCreator.info(`Server started at http://localhost:${port}`);
+});
 
 
