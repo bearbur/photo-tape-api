@@ -14,9 +14,11 @@ var port = 8080;
 app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.json());
 /*Database connection - set up default mongoose connection*/
-db_mongo_1.default().then(function () {
+db_mongo_1.default()
+    .then(function () {
     logger_1.loggerCreator.info("Server DB connection success.");
-}).catch(function () {
+})
+    .catch(function () {
     logger_1.loggerCreator.error("Server DB catch error.");
 });
 /*Routing*/
