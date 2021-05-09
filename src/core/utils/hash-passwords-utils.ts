@@ -3,27 +3,51 @@ import { SALT_FACTOR_USER_MODEL } from '../constants/salt';
 import * as fs from 'fs';
 import * as path from 'path';
 import { Error } from 'mongoose';
+import { loggerCreator } from '../services/logger/logger';
+
+const ZERO_FILE_DATA_LENGTH = 0;
 
 /*todo - save salt at file and read from it*/
-const salt = bcrypt.genSaltSync(SALT_FACTOR_USER_MODEL);
 
 const takeSalt = (): Promise<string> => {
     return new Promise((resolve, reject) => {
-        const filenameSalt = path.resolve('./', 'private', 'salt');
 
-        fs.access(filenameSalt, (error: Error) => {
+        const filenameSalt = path.resolve(__dirname,'../../../', 'private', 'salt.txt');
+
+        fs.access(filenameSalt,fs.constants.W_OK , (error: Error) => {
+
+            const saltToClient = bcrypt.genSaltSync(SALT_FACTOR_USER_MODEL);
+
             if (!error) {
                 fs.readFile(filenameSalt, 'utf8', (err: Error, fileData) => {
                     if (err) {
+                        loggerCreator.error(`Error on read file: ${error}.`);
                         reject(err);
                     }
-                    resolve(fileData);
+                    if(!fileData || fileData.length === ZERO_FILE_DATA_LENGTH){
+                        fs.writeFile(filenameSalt, saltToClient,  (errWrite: Error) => {
+
+                            if(errWrite){
+                                loggerCreator.error(`Error on write file: ${errWrite}.`);
+                                reject(errWrite);
+                            }
+
+
+                            resolve(saltToClient);
+                        });
+                    }else{
+                        resolve(fileData);
+                    }
+                    
                 });
             } else {
-                const saltToClient = salt;
 
-                fs.writeFile(filenameSalt, saltToClient, { encoding: 'utf8' }, (err) => {
+                loggerCreator.error(`Error on file access: ${error}.`);
+
+
+                fs.appendFile(filenameSalt, saltToClient,{ encoding: 'utf8', flag: 'a' }, (err)=> {
                     if (err) {
+                        loggerCreator.error(`Error on file append file: ${error}.`);
                         reject(err);
                     } else {
                         resolve(saltToClient);
@@ -43,6 +67,7 @@ export const generateHashPassword = (plaintextPassword: string): Promise<string>
                 /*tslint:enable*/
             })
             .catch((err) => {
+                loggerCreator.error(`Error on takeSalt: ${err}.`);
                 reject(err);
             });
     });

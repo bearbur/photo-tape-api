@@ -36,7 +36,7 @@ export class UserController extends CrudController {
                             .slice(minLengthLog, maxLengthLog)} at ${generateCurrentDateAtMs()}.`;
                         loggerCreator.error(errorMessage);
                         res.status(httpCodes.conflictAtRequest);
-                        res.send({ error: true, message: errorMessage });
+                        res.send({ error: true, message: `Creation user error at ${generateCurrentDateAtMs()}.` });
                     });
             })
             .catch(() => {
