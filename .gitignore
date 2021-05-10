@@ -6,3 +6,8 @@
 /dist/
 /combined.log
 /private/
+
+# IDE
+
+/.idea/
+/.vscode/

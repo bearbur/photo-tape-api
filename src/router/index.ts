@@ -8,14 +8,14 @@ import {userRegister, userProfile, userLogin, userLogout} from "../core/constant
 import {
     checkLoginBodyHandler,
     userCheckAuthTokenBody,
-    userRegCheckBody,
+    userRegistrationCheckBody,
 } from '../core/controllers/user/user-body-check-handlers'
 
 const router = express.Router();
 
 
 /* Register user can only user with admin or moderator right - need check login, check role */
-router.post(userRegister,[userRegCheckBody, authRegister]);
+router.post(userRegister,[userRegistrationCheckBody, authRegister]);
 
 /* Read users - need access */
 router.get(userProfile,[userCheckAuthTokenBody, userCheckLogin, authReadProfile]);

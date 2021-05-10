@@ -12,28 +12,33 @@ export const checkLoginBodyHandler = (
     const missParametersHandler = (warningParameters: string): void => {
         res.status(httpCodes.badRequest);
         res.send({ error: `Need for login: ${warningParameters}.` });
-
-        return;
     };
 
     const reqBody = req.body;
     if (!reqBody) {
         missParametersHandler('body object');
+        
+        return;
     }
 
     const { username, password } = reqBody;
 
     if (!username) {
-        missParametersHandler('user username at body object');
+        missParametersHandler('Please add username at body JSON object');
+
+        return;
     }
 
     if (!password) {
-        missParametersHandler('user password at body object');
+        missParametersHandler('Please add password at body JSON object');
+
+
+        return;
     }
 
     next();
 };
-export const userRegCheckBody = (req: UserRegReqObject, res: Response, next: NextFunction) => {
+export const userRegistrationCheckBody = (req: UserRegReqObject, res: Response, next: NextFunction) => {
     const reqObject: UserRegReqObjectBody = req.body;
     const username: string = reqObject.username;
     const password: string = reqObject.password;

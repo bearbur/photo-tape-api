@@ -123,11 +123,11 @@ export const generateSignJwtToken = (
             loggerCreator.info(`New bearer token: ${userNameToken} for username ${username}.`);
 
             res.status(httpCodes.successCreation);
-            res.send({ error: false, ['authToken']: newAuthToken });
+            res.send({ error: false, ['authToken']: userNameToken });
         })
         .catch((err) => {
             loggerCreator.error(`Error on generate sign in token for username ${username}. ${err}`);
             res.status(httpCodes.serverError);
-            res.send({ error: true });
+            res.send({ error: true, message: `Error on generate sign in token for username ${username}.` });
         });
 };
