@@ -5,12 +5,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var body_parser_1 = __importDefault(require("body-parser"));
+var compression_1 = __importDefault(require("compression"));
+var helmet_1 = __importDefault(require("helmet"));
 var router_1 = __importDefault(require("./router"));
 var logger_1 = require("./core/services/logger/logger");
 var db_mongo_1 = __importDefault(require("./config/db-mongo"));
 var app = express_1.default();
 /* default port to listen*/
 var port = 8080;
+app.use(helmet_1.default());
+app.use(compression_1.default());
 app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.json());
 /*Database connection - set up default mongoose connection*/

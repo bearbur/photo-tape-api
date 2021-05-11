@@ -6,9 +6,10 @@ import { loggerCreator } from '../../services/logger/logger';
 import httpCodes from '../../constants/http-codes';
 import { generateHashPassword } from '../../utils/hash-passwords-utils';
 import { Error } from 'mongoose';
+import { UserRegReqObject } from '../../interfaces/user-interfaces';
 
 export class UserController extends CrudController {
-    create(req: { body: { username: string; password: string } }, res: Response, next: NextFunction): void {
+    create(req: UserRegReqObject, res: Response, next: NextFunction): void {
         /* By default all users will be create as GUEST permission, with new Date() as milliseconds */
         const requestBody: { username: string; password: string } = req.body;
         const { username, password } = requestBody;

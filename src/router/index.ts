@@ -1,5 +1,5 @@
 import express from "express";
-import {authRegister, authReadProfile} from "./helpers/user-routes-helpers";
+import {authRegister, authReadProfile} from "../core/controllers/user/user-crud-midlewares";
 import {
     generateSignJwtToken, userCheckLogin,
     userVerifierOnLogin,

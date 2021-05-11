@@ -1,5 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import compression from 'compression';
+import helmet from 'helmet';
 import routerApp from './router';
 import { loggerCreator } from './core/services/logger/logger';
 import InitiateMongoServer from './config/db-mongo';
@@ -8,8 +10,9 @@ const app = express();
 
 /* default port to listen*/
 const port = 8080;
-
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(helmet())
+app.use(compression());
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
 
 /*Database connection - set up default mongoose connection*/
