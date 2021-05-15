@@ -2,13 +2,10 @@ import { NextFunction, Request, Response } from 'express';
 import httpCodes from '../../constants/http-codes';
 import { UserRegReqObject, UserRegReqObjectBody } from '../../interfaces/user-interfaces';
 import { MIN_PASSWORD_LENGTH, MIN_USERNAME_LENGTH } from '../../constants/user-conditions-constants';
+import { loggerCreator } from '../../services/logger/logger';
 
 /*Will be check precondition for login endpoint*/
-export const checkLoginBodyHandler = (
-    req: { body: { username: string; password: string } },
-    res: Response,
-    next: NextFunction
-) => {
+export const checkLoginBodyHandler = (req: UserRegReqObject, res: Response, next: NextFunction) => {
     const missParametersHandler = (warningParameters: string): void => {
         res.status(httpCodes.badRequest);
         res.send({ error: `Need for login: ${warningParameters}.` });
@@ -16,8 +13,8 @@ export const checkLoginBodyHandler = (
 
     const reqBody = req.body;
     if (!reqBody) {
-        missParametersHandler('body object');
-        
+        missParametersHandler('Miss body JSON objects');
+
         return;
     }
 
@@ -31,7 +28,6 @@ export const checkLoginBodyHandler = (
 
     if (!password) {
         missParametersHandler('Please add password at body JSON object');
-
 
         return;
     }
@@ -65,6 +61,9 @@ export const userRegistrationCheckBody = (req: UserRegReqObject, res: Response, 
 export const userCheckAuthTokenBody = (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
+
+    loggerCreator.info(`check login body authHeader: ${authHeader}`);
+    loggerCreator.info(`check login body token: ${token}`);
 
     if (!token || !authHeader) {
         res.status(httpCodes.noAuth);

@@ -6,7 +6,7 @@ import { loggerCreator } from '../../services/logger/logger';
 import { checkOnEmptyArray } from '../../utils/data-analayze-utils';
 import { checkOnExpirationDate, generateCurrentDateAtMs } from '../../utils/date-utils';
 import { FIRST_ELEMENT_INDEX } from '../../constants/utils-constants';
-import { AuthTokenFindResultUnit } from '../../interfaces/aut-token-interfaces';
+import { AuthTokenFindResult } from '../../interfaces/aut-token-interfaces';
 import { generateHashPassword } from '../../utils/hash-passwords-utils';
 import { getJwtSignToken } from '../../utils/jwt-user-auth-utils';
 import { getExpirationJWTms } from '../../../config/user-auth';
@@ -17,11 +17,13 @@ export const userCheckLogin = (req: Request, res: Response, next: NextFunction) 
 
     /* todo - by token check access of user */
 
+    loggerCreator.info(`token: ${token}`);
+
     AuthToken.find(
         {
-            token,
+            user_token: token,
         },
-        (err, data: AuthTokenFindResultUnit[]) => {
+        (err, data: AuthTokenFindResult) => {
             if (err) {
                 loggerCreator.error('Server error on find token.');
                 res.status(httpCodes.serverError);
@@ -32,21 +34,25 @@ export const userCheckLogin = (req: Request, res: Response, next: NextFunction) 
 
             if (checkOnEmptyArray(data)) {
                 loggerCreator.error('Not found token at DB.');
-                res.status(httpCodes.serverError);
+                res.status(httpCodes.noAuth);
                 res.send({ error: 'Not found token at DB.' });
 
                 return;
             }
 
-            const { expiration_date, user_token, user_id } = data[FIRST_ELEMENT_INDEX];
+            const { expiration_date, user_token, inactive } = data[FIRST_ELEMENT_INDEX];
 
-            if (!expiration_date || !user_token || !user_id) {
+            loggerCreator.info(expiration_date);
+            loggerCreator.info(user_token);
+            loggerCreator.info(inactive);
+
+            if (!expiration_date || !user_token || typeof inactive !== 'boolean') {
                 loggerCreator.error(
-                    `Wrong data at DB. Need contain expiration_date, user_token, user_id fields at model.`
+                    `Wrong data at DB. Need contain expiration_date, user_token, inactive fields at model.`
                 );
-                res.status(httpCodes.serverError);
+                res.status(httpCodes.badRequest);
                 res.send({
-                    error: 'Wrong data at DB. Need contain expiration_date, user_token, user_id fields at model.',
+                    error: 'Error with your token.',
                 });
 
                 return;
