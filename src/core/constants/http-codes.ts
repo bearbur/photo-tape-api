@@ -1,4 +1,5 @@
 const successCreation = 201;
+const success = 200;
 
 const badRequest = 400;
 const noAuth = 401;
@@ -14,4 +15,5 @@ export default {
     notFound,
     serverError,
     successCreation,
+    success,
 };

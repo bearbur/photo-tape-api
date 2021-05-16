@@ -15,9 +15,7 @@ export const userCheckLogin = (req: Request, res: Response, next: NextFunction) 
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
 
-    /* todo - by token check access of user */
-
-    loggerCreator.info(`token: ${token}`);
+    loggerCreator.info('token:', token);
 
     AuthToken.find(
         {
@@ -58,10 +56,20 @@ export const userCheckLogin = (req: Request, res: Response, next: NextFunction) 
                 return;
             }
 
+            /* todo - by token check access of user */
             /* todo check on expiration time - call checkOnExpirationDateMinutes with expiration_date field */
 
-            checkOnExpirationDate(expiration_date);
-            loggerCreator.info('User token: ', token, ' was successfully login.');
+            if (!checkOnExpirationDate(expiration_date)) {
+                loggerCreator.error(`Expire token. ${expiration_date} - expiration_date.`);
+                res.status(httpCodes.noAuth);
+                res.send({
+                    error: 'Token has expire.',
+                });
+
+                return;
+            }
+
+            loggerCreator.info(`User token: ${user_token}  was successfully login.`);
 
             next();
         }
@@ -116,6 +124,12 @@ export const generateSignJwtToken = (
     next: NextFunction
 ) => {
     const username = req.body.username;
+
+    if (!username) {
+        next();
+
+        return;
+    }
 
     const userNameToken = getJwtSignToken(username);
 
