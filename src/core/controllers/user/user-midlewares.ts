@@ -57,7 +57,8 @@ export const userCheckLogin = (req: Request, res: Response, next: NextFunction) 
             }
 
             /* todo - by token check access of user */
-            /* todo check on expiration time - call checkOnExpirationDateMinutes with expiration_date field */
+
+            /* check on expiration time - call checkOnExpirationDateMinutes with expiration_date field */
 
             if (!checkOnExpirationDate(expiration_date)) {
                 loggerCreator.error(`Expire token. ${expiration_date} - expiration_date.`);

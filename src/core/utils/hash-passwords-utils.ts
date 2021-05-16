@@ -7,15 +7,13 @@ import { loggerCreator } from '../services/logger/logger';
 
 const ZERO_FILE_DATA_LENGTH = 0;
 
-/*todo - save salt at file and read from it*/
+/* save salt at file and read from it*/
 
 const takeSalt = (): Promise<string> => {
     return new Promise((resolve, reject) => {
+        const filenameSalt = path.resolve(__dirname, '../../../', 'private', 'salt.txt');
 
-        const filenameSalt = path.resolve(__dirname,'../../../', 'private', 'salt.txt');
-
-        fs.access(filenameSalt,fs.constants.W_OK , (error: Error) => {
-
+        fs.access(filenameSalt, fs.constants.W_OK, (error: Error) => {
             const saltToClient = bcrypt.genSaltSync(SALT_FACTOR_USER_MODEL);
 
             if (!error) {
@@ -24,28 +22,23 @@ const takeSalt = (): Promise<string> => {
                         loggerCreator.error(`Error on read file: ${error}.`);
                         reject(err);
                     }
-                    if(!fileData || fileData.length === ZERO_FILE_DATA_LENGTH){
-                        fs.writeFile(filenameSalt, saltToClient,  (errWrite: Error) => {
-
-                            if(errWrite){
+                    if (!fileData || fileData.length === ZERO_FILE_DATA_LENGTH) {
+                        fs.writeFile(filenameSalt, saltToClient, (errWrite: Error) => {
+                            if (errWrite) {
                                 loggerCreator.error(`Error on write file: ${errWrite}.`);
                                 reject(errWrite);
                             }
 
-
                             resolve(saltToClient);
                         });
-                    }else{
+                    } else {
                         resolve(fileData);
                     }
-                    
                 });
             } else {
-
                 loggerCreator.error(`Error on file access: ${error}.`);
 
-
-                fs.appendFile(filenameSalt, saltToClient,{ encoding: 'utf8', flag: 'a' }, (err)=> {
+                fs.appendFile(filenameSalt, saltToClient, { encoding: 'utf8', flag: 'a' }, (err) => {
                     if (err) {
                         loggerCreator.error(`Error on file append file: ${error}.`);
                         reject(err);

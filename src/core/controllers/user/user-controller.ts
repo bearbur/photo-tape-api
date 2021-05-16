@@ -71,7 +71,7 @@ export class UserController extends CrudController {
 
                 const username = response.data;
 
-                /* todo find user profile */
+                /* find user profile */
 
                 User.find(
                     { ['username']: username, is_active: true },
