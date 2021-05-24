@@ -1,4 +1,4 @@
-const withApiPrefix = (url: string) => `/api/${url}`;
+const withApiPrefix = (url: string) => `/photo_tape_api/${url}`;
 const withUserPrefix = (url: string) => `user/${url}`;
 
 /* User routes */
