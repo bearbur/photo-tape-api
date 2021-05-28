@@ -1,24 +1,25 @@
-import express from "express";
-import {authRegister, authReadProfile} from "../core/controllers/user/user-crud-midlewares";
+import express from 'express';
+import { authRegister, authReadProfile } from '../core/controllers/user/user-crud-midlewares';
 import {
-    generateSignJwtToken, userCheckLogin,
+    generateSignJwtToken,
+    logoutUserAuthToken,
+    userCheckAuthToken,
     userVerifierOnLogin,
-} from '../core/controllers/user/user-midlewares'
-import {userRegister, userProfile, userLogin, userLogout} from "../core/constants/endpoints";
+} from '../core/controllers/user/user-midlewares';
+import { userRegister, userProfile, userLogin, userLogout } from '../core/constants/endpoints';
 import {
     checkLoginBodyHandler,
     userCheckAuthTokenBody,
     userRegistrationCheckBody,
-} from '../core/controllers/user/user-body-check-handlers'
+} from '../core/controllers/user/user-body-check-handlers';
 
 const router = express.Router();
 
-
 /* Register user can only user with admin or moderator right - need check login, check role */
-router.post(userRegister,[userRegistrationCheckBody, authRegister]);
+router.post(userRegister, [userRegistrationCheckBody, authRegister]);
 
 /* Read users - need access */
-router.get(userProfile,[userCheckAuthTokenBody, userCheckLogin, authReadProfile]);
+router.get(userProfile, [userCheckAuthTokenBody, userCheckAuthToken, authReadProfile]);
 
 /*
     Login user - user must exist and have permissions for login.
@@ -26,14 +27,14 @@ router.get(userProfile,[userCheckAuthTokenBody, userCheckLogin, authReadProfile]
     If user already login - return to him new token and remove exist token
 */
 
-router.post(userLogin,[checkLoginBodyHandler, userVerifierOnLogin, generateSignJwtToken])
+router.post(userLogin, [checkLoginBodyHandler, userVerifierOnLogin, generateSignJwtToken]);
 
 /*
     Logout user
     On success logout - remove auth token.
 */
 
-router.post(userLogout,[])
+router.post(userLogout, [userCheckAuthTokenBody, userCheckAuthToken, logoutUserAuthToken]);
 
 /* Public posts read */
 

@@ -1,6 +1,10 @@
-import mongoose from 'mongoose';
+import mongoose, { Document, Schema } from 'mongoose';
 
-const Schema = mongoose.Schema;
+export interface AuthTokenDoc extends Document {
+    user_token: string;
+    expiration_date: number;
+    inactive: boolean;
+}
 
 const AuthTokenSchema = new Schema({
     user_token: {

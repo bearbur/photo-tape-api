@@ -6,12 +6,13 @@ import { loggerCreator } from '../../services/logger/logger';
 import { checkOnEmptyArray } from '../../utils/data-analayze-utils';
 import { checkOnExpirationDate, generateCurrentDateAtMs } from '../../utils/date-utils';
 import { FIRST_ELEMENT_INDEX } from '../../constants/utils-constants';
-import { AuthTokenFindResult } from '../../interfaces/aut-token-interfaces';
+import { AuthTokenFindResult, AuthTokenFindResultUnit } from '../../interfaces/aut-token-interfaces';
 import { generateHashPassword } from '../../utils/hash-passwords-utils';
 import { getJwtSignToken } from '../../utils/jwt-user-auth-utils';
 import { getExpirationJWTms } from '../../../config/user-auth';
+import { Error } from 'mongoose';
 
-export const userCheckLogin = (req: Request, res: Response, next: NextFunction) => {
+export const userCheckAuthToken = (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
 
@@ -20,12 +21,13 @@ export const userCheckLogin = (req: Request, res: Response, next: NextFunction) 
     AuthToken.find(
         {
             user_token: token,
+            inactive: false,
         },
         (err, data: AuthTokenFindResult) => {
             if (err) {
                 loggerCreator.error('Server error on find token.');
-                res.status(httpCodes.serverError);
-                res.send({ error: 'Server error on find token.' });
+                res.status(httpCodes.badRequest);
+                res.send({ error: 'Error on find token.' });
 
                 return;
             }
@@ -150,5 +152,30 @@ export const generateSignJwtToken = (
             loggerCreator.error(`Error on generate sign in token for username ${username}. ${err}`);
             res.status(httpCodes.serverError);
             res.send({ error: true, message: `Error on generate sign in token for username ${username}.` });
+        });
+};
+
+export const logoutUserAuthToken = (req: Request, res: Response, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(' ')[1];
+
+    /* tslint:disable */
+    AuthToken.findOneAndUpdate(
+        /* tslint:enable */
+        {
+            user_token: token,
+        },
+        { inactive: true },
+        { new: true }
+    )
+        .then((resp: AuthTokenFindResultUnit) => {
+            loggerCreator.info('Logout token success.', token);
+            res.status(httpCodes.success);
+            res.send({ error: false, message: `Successfully logout.` });
+        })
+        .catch((e: Error) => {
+            loggerCreator.error('Server error on logout token.');
+            res.status(httpCodes.badRequest);
+            res.send({ error: 'Error on logout.' });
         });
 };
