@@ -1,17 +1,15 @@
 import express from 'express';
 import { authRegister, authReadProfile } from '../core/controllers/user/user-crud-midlewares';
-import {
-    generateSignJwtToken,
-    logoutUserAuthToken,
-    userCheckAuthToken,
-    userVerifierOnLogin,
-} from '../core/controllers/user/user-midlewares';
+import { userVerifyAuthToken } from '../core/controllers/user/user-verify-auth-token';
 import { userRegister, userProfile, userLogin, userLogout } from '../core/constants/endpoints';
 import {
     checkLoginBodyHandler,
     userCheckAuthTokenBody,
     userRegistrationCheckBody,
 } from '../core/controllers/user/user-body-check-handlers';
+import { userVerifierOnLogin } from '../core/controllers/user/user-verifier-on-login';
+import { userGenerateSignJwtToken } from '../core/controllers/user/user-generate-sign-jwt-token';
+import { userLogoutAuthToken } from '../core/controllers/user/user-logout-auth-token';
 
 const router = express.Router();
 
@@ -19,7 +17,7 @@ const router = express.Router();
 router.post(userRegister, [userRegistrationCheckBody, authRegister]);
 
 /* Read users - need access */
-router.get(userProfile, [userCheckAuthTokenBody, userCheckAuthToken, authReadProfile]);
+router.get(userProfile, [userCheckAuthTokenBody, userVerifyAuthToken, authReadProfile]);
 
 /*
     Login user - user must exist and have permissions for login.
@@ -27,14 +25,14 @@ router.get(userProfile, [userCheckAuthTokenBody, userCheckAuthToken, authReadPro
     If user already login - return to him new token and remove exist token
 */
 
-router.post(userLogin, [checkLoginBodyHandler, userVerifierOnLogin, generateSignJwtToken]);
+router.post(userLogin, [checkLoginBodyHandler, userVerifierOnLogin, userGenerateSignJwtToken]);
 
 /*
     Logout user
     On success logout - remove auth token.
 */
 
-router.post(userLogout, [userCheckAuthTokenBody, userCheckAuthToken, logoutUserAuthToken]);
+router.post(userLogout, [userCheckAuthTokenBody, userVerifyAuthToken, userLogoutAuthToken]);
 
 /* Public posts read */
 
