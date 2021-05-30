@@ -17,6 +17,13 @@ app.use(helmet_1.default());
 app.use(compression_1.default());
 app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.json());
+/* Set special headers for CORS */
+app.use(function (req, res, next) {
+    res.append('Access-Control-Allow-Origin', '*');
+    res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.append('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
 /*Database connection - set up default mongoose connection*/
 db_mongo_1.default()
     .then(function () {

@@ -10,10 +10,18 @@ const app = express();
 
 /* default port to listen*/
 const port = 8080;
-app.use(helmet())
+app.use(helmet());
 app.use(compression());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
+
+/* Set special headers for CORS */
+app.use((req, res, next) => {
+    res.append('Access-Control-Allow-Origin', '*');
+    res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.append('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
 
 /*Database connection - set up default mongoose connection*/
 InitiateMongoServer()
@@ -31,5 +39,3 @@ app.use(routerApp);
 app.listen(port, () => {
     loggerCreator.info(`Server started at http://localhost:${port}`);
 });
-
-
