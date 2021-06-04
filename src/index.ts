@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import routerApp from './router';
 import { loggerCreator } from './core/services/logger/logger';
 import InitiateMongoServer from './config/db-mongo';
+import dataBaseSettingsCheck from './core/services/admin/db-setting-check';
 
 const app = express();
 
@@ -34,6 +35,10 @@ InitiateMongoServer()
 
 /*Routing*/
 app.use(routerApp);
+
+/*Tasks*/
+
+dataBaseSettingsCheck();
 
 /* start the Express server */
 app.listen(port, () => {
