@@ -11,8 +11,6 @@ export const userVerifyAuthToken = (req: Request, res: Response, next: NextFunct
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
 
-    loggerCreator.info('token:', token);
-
     AuthToken.find(
         {
             user_token: token,
@@ -37,9 +35,6 @@ export const userVerifyAuthToken = (req: Request, res: Response, next: NextFunct
 
             const { expiration_date, user_token, inactive } = data[FIRST_ELEMENT_INDEX];
 
-            loggerCreator.info(expiration_date);
-            loggerCreator.info(user_token);
-            loggerCreator.info(inactive);
 
             if (!expiration_date || !user_token || typeof inactive !== 'boolean') {
                 loggerCreator.error(
@@ -67,7 +62,7 @@ export const userVerifyAuthToken = (req: Request, res: Response, next: NextFunct
                 return;
             }
 
-            loggerCreator.info(`User token: ${user_token}  was successfully login.`);
+            loggerCreator.info(`Successfully login.`);
 
             next();
         }

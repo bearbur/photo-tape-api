@@ -41,7 +41,7 @@ router.post(userLogout, [userCheckAuthTokenBody, userVerifyAuthToken, userLogout
     On success password update - success response.
 */
 
-router.post(userChangePassword, [checkChangePasswordBody, userCheckAuthTokenBody, userVerifyAuthToken, userUpdatePassword]);
+router.put(userChangePassword, [checkChangePasswordBody, userCheckAuthTokenBody, userVerifyAuthToken, userUpdatePassword]);
 
 /* Public posts read */
 

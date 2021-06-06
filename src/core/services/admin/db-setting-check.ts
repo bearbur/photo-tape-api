@@ -9,7 +9,7 @@ import { generateHashPassword } from '../../utils/hash-passwords-utils';
 const dataBaseSettingsCheck = () => {
 
 
-    loggerCreator.info('Data base async check on servive start');
+    loggerCreator.info('Data base async check on service start');
 
     User.find({permission: userPermissions[ADMIN].level}, (err: Error, docs: UserInterface[] | [])=>{
         if(err){

@@ -62,10 +62,13 @@ export const userCheckAuthTokenBody = (req: Request, res: Response, next: NextFu
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
 
-    loggerCreator.info(`check login body authHeader: ${authHeader}`);
-    loggerCreator.info(`check login body token: ${token}`);
 
     if (!token || !authHeader) {
+
+
+    loggerCreator.error(`Login body authHeader incorrect`);
+    
+
         res.status(httpCodes.noAuth);
         res.send({ error: 'No auth header.' });
 

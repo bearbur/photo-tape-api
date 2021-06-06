@@ -48,7 +48,7 @@ export const userUpdatePassword = (req: UserRegReqObject, res: Response, next: N
 
                      return;
                 }
-                loggerCreator.info('Success update password for ',username);
+                loggerCreator.info(`Success update password for ${username}.`);
                 res.status(httpCodes.success);
 
                 res.send({error: false, message:'Password was update.'});
