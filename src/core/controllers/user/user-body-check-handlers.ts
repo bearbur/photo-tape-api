@@ -39,7 +39,7 @@ export const userRegistrationCheckBody = (req: UserRegReqObject, res: Response, 
     const username: string = reqObject.username;
     const password: string = reqObject.password;
 
-    /* Check login and password for minimum correct conditions (exist and not less than minimum conditions */
+    /* Check username and password for minimum correct conditions (exist and not less than minimum conditions). */
     if (!username || !password) {
         res.status(httpCodes.badRequest);
         res.send({ error: 'Please, send username and password at the request body.' });
@@ -74,3 +74,30 @@ export const userCheckAuthTokenBody = (req: Request, res: Response, next: NextFu
 
     next();
 };
+
+export const checkChangePasswordBody = (req: UserRegReqObject, res: Response, next: NextFunction) => {
+
+    const reqObject: UserRegReqObjectBody = req.body;
+
+    const password: string = reqObject.password;
+
+      /* Check password for minimum correct conditions (exist and not less than minimum conditions). */
+        if (!password) {
+            res.status(httpCodes.badRequest);
+            res.send({ error: 'Please, send password at the request body.' });
+    
+            return;
+        }
+    
+        if ( password.length <= MIN_PASSWORD_LENGTH) {
+            res.status(httpCodes.badRequest);
+            res.send({
+                error: `Minimum length of username is ${MIN_PASSWORD_LENGTH} symbols.`,
+            });
+    
+            return;
+        }
+    
+        next();
+
+}

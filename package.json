@@ -13,6 +13,7 @@
     "tslint-check": "tslint-config-prettier-check ./tslint.json"
   },
   "dependencies": {
+    "async": "3.2.0",
     "bcrypt": "5.0.1",
     "body-parser": "1.19.0",
     "compression": "1.7.4",
@@ -25,6 +26,7 @@
     "winston": "3.3.3"
   },
   "devDependencies": {
+    "@types/async": "3.2.6",
     "@types/bcrypt": "3.0.0",
     "@types/compression": "1.7.0",
     "@types/helmet": "4.0.0",
