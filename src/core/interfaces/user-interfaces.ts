@@ -15,3 +15,12 @@ export interface UserInterface {
     creation_date: number,
     is_active: boolean
 }
+
+export interface UserReauthInterface {
+    body: {
+        username: string
+    },
+    headers: {
+        authorization: string
+    }
+}

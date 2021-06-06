@@ -8,3 +8,4 @@ export const userProfile = withApiPrefix(withUserPrefix('profile'));
 export const userLogin = withApiPrefix(withUserPrefix('login'));
 export const userLogout = withApiPrefix(withUserPrefix('logout'));
 export const userChangePassword = withApiPrefix(withUserPrefix('change/password'));
+export const userReAuth = withApiPrefix(withUserPrefix('reauth'));

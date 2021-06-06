@@ -1,7 +1,7 @@
 import express from 'express';
 import { authRegister, authReadProfile } from '../core/controllers/user/user-crud-midlewares';
 import { userVerifyAuthToken } from '../core/controllers/user/user-verify-auth-token';
-import { userRegister, userProfile, userLogin, userLogout, userChangePassword } from '../core/constants/endpoints';
+import { userRegister, userProfile, userLogin, userLogout, userChangePassword, userReAuth } from '../core/constants/endpoints';
 import {
     checkChangePasswordBody,
     checkLoginBodyHandler,
@@ -12,6 +12,7 @@ import { userVerifierOnLogin } from '../core/controllers/user/user-verifier-on-l
 import { userGenerateSignJwtToken } from '../core/controllers/user/user-generate-sign-jwt-token';
 import { userLogoutAuthToken } from '../core/controllers/user/user-logout-auth-token';
 import { userUpdatePassword } from '../core/controllers/user/user-update-password';
+import {userReAuthByToken} from '../core/controllers/user/user-re-auth-by-token'
 
 const router = express.Router();
 
@@ -42,6 +43,13 @@ router.post(userLogout, [userCheckAuthTokenBody, userVerifyAuthToken, userLogout
 */
 
 router.put(userChangePassword, [checkChangePasswordBody, userCheckAuthTokenBody, userVerifyAuthToken, userUpdatePassword]);
+
+/*
+    Get new authtoken for user
+    On success password generate new token for auth and make inactive current.
+*/
+
+router.get(userReAuth, [userCheckAuthTokenBody, userVerifyAuthToken, userReAuthByToken]);
 
 /* Public posts read */
 

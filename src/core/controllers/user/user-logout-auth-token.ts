@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import AuthToken from '../../models/auth-token/auth-token-model';
-import { AuthTokenFindResultUnit } from '../../interfaces/aut-token-interfaces';
 import { loggerCreator } from '../../services/logger/logger';
 import httpCodes from '../../constants/http-codes';
 import { Error } from 'mongoose';

@@ -6,8 +6,9 @@ import { checkOnEmptyArray } from '../../utils/data-analayze-utils';
 import { checkOnExpirationDate } from '../../utils/date-utils';
 import { FIRST_ELEMENT_INDEX } from '../../constants/utils-constants';
 import { AuthTokenFindResult } from '../../interfaces/aut-token-interfaces';
+import { UserReauthInterface } from '../../interfaces/user-interfaces';
 
-export const userVerifyAuthToken = (req: Request, res: Response, next: NextFunction) => {
+export const userVerifyAuthToken = (req: Request|UserReauthInterface, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
 

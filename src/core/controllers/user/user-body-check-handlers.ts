@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import httpCodes from '../../constants/http-codes';
-import { UserRegReqObject, UserRegReqObjectBody } from '../../interfaces/user-interfaces';
+import { UserReauthInterface, UserRegReqObject, UserRegReqObjectBody } from '../../interfaces/user-interfaces';
 import { MIN_PASSWORD_LENGTH, MIN_USERNAME_LENGTH } from '../../constants/user-conditions-constants';
 import { loggerCreator } from '../../services/logger/logger';
 
@@ -58,7 +58,7 @@ export const userRegistrationCheckBody = (req: UserRegReqObject, res: Response, 
 
     next();
 };
-export const userCheckAuthTokenBody = (req: Request, res: Response, next: NextFunction) => {
+export const userCheckAuthTokenBody = (req: Request | UserReauthInterface, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
 
