@@ -1,10 +1,6 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
-export interface AuthTokenDoc extends Document {
-    user_token: string;
-    expiration_date: number;
-    inactive: boolean;
-}
+/* todo add id of user for tokens */
 
 const AuthTokenSchema = new Schema({
     user_token: {

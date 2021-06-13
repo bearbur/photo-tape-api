@@ -1,7 +1,14 @@
 import express from 'express';
 import { authRegister, authReadProfile } from '../core/controllers/user/user-crud-midlewares';
 import { userVerifyAuthToken } from '../core/controllers/user/user-verify-auth-token';
-import { userRegister, userProfile, userLogin, userLogout, userChangePassword, userReAuth } from '../core/constants/endpoints';
+import {
+    userRegister,
+    userProfile,
+    userLogin,
+    userLogout,
+    userChangePassword,
+    userReAuth,
+} from '../core/constants/endpoints';
 import {
     checkChangePasswordBody,
     checkLoginBodyHandler,
@@ -12,7 +19,7 @@ import { userVerifierOnLogin } from '../core/controllers/user/user-verifier-on-l
 import { userGenerateSignJwtToken } from '../core/controllers/user/user-generate-sign-jwt-token';
 import { userLogoutAuthToken } from '../core/controllers/user/user-logout-auth-token';
 import { userUpdatePassword } from '../core/controllers/user/user-update-password';
-import {userReAuthByToken} from '../core/controllers/user/user-re-auth-by-token'
+import { userReAuthByToken } from '../core/controllers/user/user-re-auth-by-token';
 
 const router = express.Router();
 
@@ -42,7 +49,14 @@ router.post(userLogout, [userCheckAuthTokenBody, userVerifyAuthToken, userLogout
     On success password update - success response.
 */
 
-router.put(userChangePassword, [checkChangePasswordBody, userCheckAuthTokenBody, userVerifyAuthToken, userUpdatePassword]);
+/* todo - reset all tokens for that user except active */
+
+router.put(userChangePassword, [
+    checkChangePasswordBody,
+    userCheckAuthTokenBody,
+    userVerifyAuthToken,
+    userUpdatePassword,
+]);
 
 /*
     Get new authtoken for user
