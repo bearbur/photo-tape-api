@@ -8,6 +8,8 @@ import {
     userLogout,
     userChangePassword,
     userReAuth,
+    freshArticles,
+    newArticle,
 } from '../core/constants/endpoints';
 import {
     checkChangePasswordBody,
@@ -20,6 +22,7 @@ import { userGenerateSignJwtToken } from '../core/controllers/user/user-generate
 import { userLogoutAuthToken } from '../core/controllers/user/user-logout-auth-token';
 import { userUpdatePassword } from '../core/controllers/user/user-update-password';
 import { userReAuthByToken } from '../core/controllers/user/user-re-auth-by-token';
+import { createPublicArticle, readLastPublicArticles } from '../core/controllers/article/article-crud-midlewares';
 
 const router = express.Router();
 
@@ -49,7 +52,7 @@ router.post(userLogout, [userCheckAuthTokenBody, userVerifyAuthToken, userLogout
     On success password update - success response.
 */
 
-/* todo - reset all tokens for that user except active */
+/* todo reset other auth token for username, except current */
 
 router.put(userChangePassword, [
     checkChangePasswordBody,
@@ -59,13 +62,17 @@ router.put(userChangePassword, [
 ]);
 
 /*
-    Get new authtoken for user
+    Get new auth token for user
     On success password generate new token for auth and make inactive current.
 */
 
 router.get(userReAuth, [userCheckAuthTokenBody, userVerifyAuthToken, userReAuthByToken]);
 
-/* Public posts read */
+/* Last public articles will be return (todo select from most popular and most fresh articles1)  */
+
+router.get(freshArticles, [readLastPublicArticles]);
+
+router.post(newArticle, [userCheckAuthTokenBody, userVerifyAuthToken, createPublicArticle]);
 
 /* Public posts create - need access */
 
