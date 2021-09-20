@@ -12,7 +12,8 @@ import { MAX_ERROR_LENGTH, MIN_ERROR_LENGTH } from './core/constants/utils-const
 const app = express();
 
 /* default port to listen*/
-const port = 8080;
+const PORT = 8080;
+const HOST = '0.0.0.0';
 app.use(helmet());
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -48,6 +49,6 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 /* start the Express server */
-app.listen(port, () => {
-    loggerCreator.info(`Server started at http://localhost:${port}`);
+app.listen(PORT, HOST, () => {
+    loggerCreator.info(`Server started at http://${HOST}:${PORT}`);
 });

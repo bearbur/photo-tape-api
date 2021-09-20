@@ -11,3 +11,6 @@
 
 /.idea/
 /.vscode/
+dist/index.js
+dist/index.js.map
+dist
