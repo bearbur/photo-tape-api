@@ -8,12 +8,21 @@ import InitiateMongoServer from './config/db-mongo';
 import dataBaseSettingsCheck from './core/services/admin/db-setting-check';
 import httpCodes from './core/constants/http-codes';
 import { MAX_ERROR_LENGTH, MIN_ERROR_LENGTH } from './core/constants/utils-constants';
+import cors from 'cors';
+
+const environment = process.env.NODE_ENV;
 
 const app = express();
 
 /* default port to listen*/
 const PORT = 8080;
 const HOST = '0.0.0.0';
+
+if (environment.toLowerCase() === 'development') {
+    loggerCreator.info('Dev mode.');
+    app.use(cors());
+}
+
 app.use(helmet());
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -21,7 +30,11 @@ app.use(express.json());
 
 /* Set special headers for CORS */
 app.use((req, res, next) => {
-    res.append('Access-Control-Allow-Origin', '*');
+    if (environment.toLowerCase() !== 'development') {
+        loggerCreator.info('Prod mode.');
+        res.append('Access-Control-Allow-Origin', '*');
+    }
+
     res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.append('Access-Control-Allow-Headers', 'Content-Type');
     next();
